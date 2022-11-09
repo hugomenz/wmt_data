@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "wmt-scraper": {
+      "hosting": {
+        "wmt": [
+          "wmt-scraper"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "wmt-scraper"
+  }
+}
