@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AirnodeDataService } from '../services/airnode-data.service';
+import { AirnodeDataService } from '../../services/airnode-data.service';
 
 import Chart from 'chart.js/auto';
 import { Subject, takeUntil } from 'rxjs';

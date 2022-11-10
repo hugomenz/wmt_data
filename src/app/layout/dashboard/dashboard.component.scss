@@ -1,0 +1,19 @@
+.main-cards {
+  display: grid;
+  grid-template: auto 20% / 70% auto;
+  gap: 1rem;
+}
+
+.card1 {
+  background-color: blue;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+.card2 {
+  background-color: green;
+}
+.card3 {
+  background-color: red;
+}

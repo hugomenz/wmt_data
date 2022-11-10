@@ -1,0 +1,34 @@
+@use "/src/assets/scss/variables.scss" as *;
+
+.site-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0 15px 0;
+  font-size: 20px;
+  background-color: $g-clr-dark-200;
+  color: $footer-txt-a;
+
+  & a {
+    color: $footer-txt-a;
+    &:hover {
+      color: $footer-txt-a-hover;
+      text-decoration: none;
+    }
+  }
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+img {
+  width: 2rem;
+  margin-left: 1rem;
+}
+
+.text {
+  margin-right: 0.5rem;
+}

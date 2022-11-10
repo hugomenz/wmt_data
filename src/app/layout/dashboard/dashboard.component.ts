@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { M_CHRT_TEXT } from '../chart/main-chart-text.data';
+import { M_CHRT_TEXT } from '../../components/chart/main-chart-text.data';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,8 +7,8 @@ import { M_CHRT_TEXT } from '../chart/main-chart-text.data';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  mainChartTitle = M_CHRT_TEXT.chrtTitle;
   constructor() {}
+  mainChartTitle = M_CHRT_TEXT.chrtTitle;
 
   ngOnInit(): void {}
 }
