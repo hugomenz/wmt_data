@@ -9,17 +9,12 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 html {
-  background: #0f2027; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to left,
-    #2c5364,
-    #203a43,
-    #0f2027
-  ); /* Chrome 10-25, Safari 5.1-6 */
+  //background: #12091a;
+  background: rgb(208, 27, 108);
   background: linear-gradient(
-    to left,
-    #2c5364,
-    #203a43,
-    #0f2027
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    124deg,
+    rgba(208, 27, 108, 1) 0%,
+    rgba(243, 130, 32, 1) 14%,
+    rgba(83, 44, 124, 1) 100%
+  );
 }

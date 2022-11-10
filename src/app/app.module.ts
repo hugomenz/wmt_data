@@ -21,12 +21,22 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule, Routes } from '@angular/router';
 import { CardComponent } from './card/card.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { HomeComponent } from './home/home.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 const routes: Routes = [
-  { path: 'home', component: CardComponent },
+  { path: 'home', component: HomeComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 @NgModule({
-  declarations: [AppComponent, ChartComponent, CardComponent],
+  declarations: [
+    AppComponent,
+    ChartComponent,
+    CardComponent,
+    DashboardComponent,
+    HomeComponent,
+    ToolbarComponent,
+  ],
   imports: [
     RouterModule.forRoot(routes),
     BrowserModule,

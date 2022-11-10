@@ -1,0 +1,17 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <h1>{{ title }}</h1>
+    <span class="menu-spacer"></span>
+    <div>
+      <a mat-button [routerLink]="'/home'"> Accounts </a>
+      <a mat-button [routerLink]="'/about'"> Create Account </a>
+      <a mat-button [routerLink]="'/support'"> Contacts </a>
+    </div>
+  </mat-toolbar-row>
+
+  <mat-toolbar-row>
+    <span style="font-size: 12px"
+      >SimpleCRM helps you easily manage your contacts</span
+    >
+  </mat-toolbar-row>
+</mat-toolbar>

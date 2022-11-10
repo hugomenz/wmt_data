@@ -3,7 +3,8 @@ import { AirnodeDataService } from '../services/airnode-data.service';
 
 import Chart from 'chart.js/auto';
 import { Subject, takeUntil } from 'rxjs';
-import { TEXT } from 'src/assets/text.data';
+import { M_CHRT_TEXT } from './main-chart-text.data';
+
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
@@ -26,14 +27,18 @@ export class ChartComponent implements OnInit, OnDestroy {
           data
         );
         this.chart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
+
         this.chart.data.datasets[0] = {
-          type: 'line',
-          label: TEXT.chrtLblUsers,
-          data: data.map((dataIn) => dataIn.users),
+          label: M_CHRT_TEXT.chrtLblUsers,
           yAxisID: 'yAxis0',
-          borderColor: '#FD7E14',
+          type: 'line',
+          pointStyle: 'dash',
+          tension: 0.4,
           fill: true,
-          pointStyle: 'line',
+          backgroundColor: 'rgba(208, 27, 108, 0.15)',
+          //backgroundColor: 'rgba(253, 126, 23, 0.08)',
+          borderColor: '#FD7E14',
+          data: data.map((dataIn) => dataIn.users),
         };
 
         this.chart.update();
@@ -49,27 +54,39 @@ export class ChartComponent implements OnInit, OnDestroy {
         );
 
         this.chart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
+
         this.chart.data.datasets[1] = {
-          type: 'bar',
-          label: TEXT.chrtLblNetwork,
-          data: data.map((dataIn) => dataIn.network),
+          label: M_CHRT_TEXT.chrtLblNetwork,
           yAxisID: 'yAxis1',
-          backgroundColor: 'rgba(203, 175, 253, 0.2)',
+          type: 'bar',
+          backgroundColor: 'rgba(90, 35, 149, 0.7)',
+          data: data.map((dataIn) => dataIn.network),
         };
+
         this.chart.options.scales = {
           yAxis0: {
-            position: 'left',
-            title: {
-              display: true,
-              text: TEXT.chrtAxisUsers,
-            },
-          },
-          yAxis1: {
+            grid: { display: false },
+            beginAtZero: false,
             position: 'right',
             title: {
               display: true,
-              text: TEXT.chrtAxisNetwork,
+              text: M_CHRT_TEXT.chrtAxisUsers,
             },
+            ticks: { font: { size: 12 } },
+          },
+          yAxis1: {
+            grid: { display: false },
+            beginAtZero: false,
+            position: 'left',
+            title: {
+              display: true,
+              text: M_CHRT_TEXT.chrtAxisNetwork,
+            },
+            ticks: { font: { size: 12 } },
+          },
+          x: {
+            grid: { display: false },
+            ticks: { font: { size: 10 } },
           },
         };
 
@@ -85,14 +102,14 @@ export class ChartComponent implements OnInit, OnDestroy {
   createChart() {
     Chart.defaults.color = '#fff';
     this.chart = new Chart('MyChart', {
-      type: 'line', //this denotes tha type of chart
       data: {
-        //labels: this.users.map((data) => data.t),
         labels: [],
         datasets: [],
       },
       options: {
         aspectRatio: 2.5,
+        responsive: true,
+        maintainAspectRatio: false,
       },
     });
   }

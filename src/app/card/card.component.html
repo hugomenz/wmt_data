@@ -2,8 +2,7 @@
 <mat-card class="dashboard-card">
   <mat-card-header>
     <mat-card-title>
-      Users and Network Consumption [GB]
-
+      {{ title }}
       <button
         mat-icon-button
         class="more-button"
@@ -19,6 +18,6 @@
     </mat-card-title>
   </mat-card-header>
   <mat-card-content class="dashboard-card-content">
-    <app-chart></app-chart>
+    <ng-content></ng-content>
   </mat-card-content>
 </mat-card>
