@@ -1,22 +1,20 @@
 @use "/src/assets/scss/variables.scss" as *;
 
 .container {
-  display: grid;
-  grid-template-rows: min-content 1fr min-content;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid red;
 }
-header {
-  grid-row: 1;
+.header {
 }
-main {
-  grid-row: 2;
+.content {
 }
 
-footer {
-  grid-row: 3;
+.footer {
   display: flex;
   justify-content: center;
-  position: absolute;
   background-color: $g-clr-dark-200;
   width: 100%;
-  bottom: 0px;
 }

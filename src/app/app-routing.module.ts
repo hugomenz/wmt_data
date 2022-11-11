@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { SupportComponent } from './layout/support/support.component';
 import { AboutComponent } from './layout/about/about.component';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './layout/home/home.component';
+import { DashboardComponent } from './layout/dashboard/dashboard.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: 'dashboard', component: DashboardComponent },
   {
     path: 'support',
     component: SupportComponent,

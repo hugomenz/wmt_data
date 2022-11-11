@@ -24,13 +24,13 @@ import { CardComponent } from './components/card/card.component';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
 
 import { FooterComponent } from './layout/footer/footer.component';
-import { HomeComponent } from './layout/home/home.component';
 import { ToolbarComponent } from './layout/toolbar/toolbar.component';
 import { SupportComponent } from './layout/support/support.component';
 import { AboutComponent } from './layout/about/about.component';
+import { DayChartComponent } from './components/day-chart/day-chart.component';
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'dashboard', component: DashboardComponent },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 ];
 @NgModule({
   declarations: [
@@ -38,11 +38,11 @@ const routes: Routes = [
     ChartComponent,
     CardComponent,
     DashboardComponent,
-    HomeComponent,
     ToolbarComponent,
     FooterComponent,
     SupportComponent,
     AboutComponent,
+    DayChartComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),

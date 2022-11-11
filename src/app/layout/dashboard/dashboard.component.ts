@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AirnodeQueryDataService } from 'src/app/services/airnode-query-data.service';
 import { M_CHRT_TEXT } from '../../components/chart/main-chart-text.data';
 
 @Component({
@@ -7,7 +8,7 @@ import { M_CHRT_TEXT } from '../../components/chart/main-chart-text.data';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  constructor() {}
+  constructor(public _queryANodeData: AirnodeQueryDataService) {}
   mainChartTitle = M_CHRT_TEXT.chrtTitle;
 
   ngOnInit(): void {}

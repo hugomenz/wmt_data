@@ -1,9 +1,13 @@
 .chart-container {
   //border: 1px solid green;
-  display: flex;
+  /*   display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-items: stretch;*/
 }
 
 canvas {
   //border: 1px solid blue;
-  height: 80vh !important;
+  height: 75vh !important;
+  width: 99% !important;
 }

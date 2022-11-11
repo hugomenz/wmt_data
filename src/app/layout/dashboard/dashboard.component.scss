@@ -1,19 +1,31 @@
 .main-cards {
-  display: grid;
-  grid-template: auto 20% / 70% auto;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  background: rgb(208, 27, 108);
+  background: linear-gradient(
+    124deg,
+    rgba(208, 27, 108, 1) 0%,
+    rgba(243, 130, 32, 1) 14%,
+    rgba(83, 44, 124, 1) 100%
+  );
 }
 
 .card1 {
-  background-color: blue;
-  grid-column-start: 1;
-  grid-column-end: 2;
-  grid-row-start: 1;
-  grid-row-end: 3;
+  padding: 16px;
 }
+
+.column {
+  padding-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  //padding-right: 4rem;
+}
+
 .card2 {
-  background-color: green;
+  padding-left: 16px;
+  width: 48vw;
 }
 .card3 {
-  background-color: red;
+  padding-right: 16px;
+  width: 48vw;
 }
