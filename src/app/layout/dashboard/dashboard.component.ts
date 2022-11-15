@@ -12,10 +12,12 @@ export class DashboardComponent implements OnInit {
   mainChartTitle = M_CHRT_TEXT.chrtTitle;
 
   chartCurrentDayTitle =
-    M_CHRT_TEXT.chrt24Title + '.  ' + this._dateCalc.getNowTimeStamp().standard;
+    M_CHRT_TEXT.chrtCurrentDayTitle +
+    '.  ' +
+    this._dateCalc.getNowTimeStamp().standard;
 
   chartPreviousDayTitle =
-    M_CHRT_TEXT.chrt24Title +
+    M_CHRT_TEXT.chrtPreviousDayTitle +
     '.  ' +
     this._dateCalc.getYesterdayFirstTimeStamp().standard;
 

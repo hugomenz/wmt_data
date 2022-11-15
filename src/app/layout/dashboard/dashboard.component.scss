@@ -17,7 +17,7 @@
 
 .column {
   border: 1px solid yellow;
-  width: 100%;
+  width: 99%;
 
   display: flex;
   justify-content: space-between;
@@ -27,12 +27,12 @@
 .card2 {
   border: 1px solid yellow;
   padding-left: 16px;
-  width: 47vw;
+  width: 48vw;
 }
 .card3 {
   border: 1px solid yellow;
-  padding-right: 16px;
-  width: 47vw;
+  //padding-right: 16px;
+  width: 48vw;
 }
 
 .card4 {
