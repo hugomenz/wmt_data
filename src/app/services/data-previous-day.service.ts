@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   AirNodes,
   ANdata,
@@ -7,17 +7,17 @@ import {
 } from 'src/interfaces/data-firestore.interface';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { DateCalculationService } from './date-calculation.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AirnodeQueryDataService {
-  private wmtDataSubject: BehaviorSubject<AirNodes[]> = new BehaviorSubject(
-    [] as AirNodes[]
-  );
+export class DataPreviousDayService {
+  private wmtPrevDayDataSubject: BehaviorSubject<AirNodes[]> =
+    new BehaviorSubject([] as AirNodes[]);
   public readonly wmtData: Observable<AirNodes[]> =
-    this.wmtDataSubject.asObservable();
-  // comeme la pinga?
+    this.wmtPrevDayDataSubject.asObservable();
+
   private networkDataSubject: BehaviorSubject<Network[]> = new BehaviorSubject(
     [] as Network[]
   );
@@ -30,24 +30,21 @@ export class AirnodeQueryDataService {
   public readonly userData: Observable<Users[]> =
     this.userDataSubject.asObservable();
 
-  constructor(private firestore: AngularFirestore) {}
+  constructor(
+    private firestore: AngularFirestore,
+    private _dateCalc: DateCalculationService
+  ) {
+    let startDate = this._dateCalc.getYesterdayFirstTimeStamp().firstOfDay;
+    let endDate = this._dateCalc.getNowTimeStamp().firstOfDay;
 
-  ngOnInit(): void {}
-
-  getData(start: string, end: string) {
     this.firestore
       .collection<AirNodes>('WMT Scan Scraper', (ref) =>
-        ref.orderBy('timestamp').startAt(start).endBefore(end)
+        ref.orderBy('timestamp').startAt(startDate).endBefore(endDate)
       )
       .valueChanges()
       .subscribe((data) => {
-        console.log(
-          '%cchart.component.ts line:26 data',
-          'color: #007acc;',
-          data
-        );
-
-        this.wmtDataSubject.next(data);
+        console.log(data);
+        this.wmtPrevDayDataSubject.next(data);
 
         this.userDataSubject.next(
           data.map((data) => ({
@@ -67,11 +64,5 @@ export class AirnodeQueryDataService {
       });
   }
 
-  getUserData() {
-    console.log(this.userData);
-  }
-
-  getNetworkData() {
-    console.log(this.networkData);
-  }
+  ngOnInit(): void {}
 }

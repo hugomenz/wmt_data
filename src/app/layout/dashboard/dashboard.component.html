@@ -4,15 +4,22 @@
   </app-card>
 
   <div class="column">
-    <app-card class="card2" title="{{ chart24Title }}">
-      <app-day-chart chartID="dayChart"></app-day-chart>
+    <app-card class="card2" title="{{ chartPreviousDayTitle }}">
+      <app-last-day-chart chartID="lastDayChart"></app-last-day-chart>
     </app-card>
 
-    <app-card class="card3" title=" Week overview Heatmap">
-      <app-main-chart></app-main-chart>
-      <!--  <app-heatmap chartID="heatMap"></app-heatmap> -->
+    <app-card class="card3" title=" {{ chartCurrentDayTitle }}">
+      <app-day-chart chartID="dayChart"></app-day-chart>
     </app-card>
   </div>
+
+  <app-card title="7 days comparaison chart" class="card4">
+    <!-- <app-chart chartID="MyChart"></app-chart> -->
+  </app-card>
+
+  <app-card title="Heatmap Last 7 days" class="card5">
+    <!-- <app-chart chartID="MyChart"></app-chart> -->
+  </app-card>
 </div>
 
 <!--  -->

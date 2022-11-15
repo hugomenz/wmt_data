@@ -17,9 +17,7 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { CardComponent } from './components/card/card.component';
 
 import { ChartComponent } from './components/chart/chart.component';
-import { MainChartComponent } from './components/main-chart/main-chart.component';
 import { DayChartComponent } from './components/day-chart/day-chart.component';
-import { HeatmapComponent } from './components/heatmap/heatmap.component';
 
 import { AngularFireModule } from '@angular/fire/compat';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
@@ -27,6 +25,7 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AngularMaterialModule } from './angular-material.module';
+import { LastDayChartComponent } from './components/last-day-chart/last-day-chart.component';
 
 @NgModule({
   declarations: [
@@ -39,8 +38,7 @@ import { AngularMaterialModule } from './angular-material.module';
     SupportComponent,
     AboutComponent,
     DayChartComponent,
-    HeatmapComponent,
-    MainChartComponent,
+    LastDayChartComponent,
   ],
   imports: [
     RouterModule,

@@ -11,20 +11,36 @@
 }
 
 .card1 {
+  border: 1px solid yellow;
   padding: 16px;
 }
 
 .column {
-  padding-bottom: 16px;
+  border: 1px solid yellow;
+  width: 100%;
+
   display: flex;
   justify-content: space-between;
   //padding-right: 4rem;
 }
 
 .card2 {
+  border: 1px solid yellow;
   padding-left: 16px;
-  width: 48vw;
+  width: 47vw;
 }
 .card3 {
+  border: 1px solid yellow;
   padding-right: 16px;
+  width: 47vw;
+}
+
+.card4 {
+  border: 1px solid yellow;
+  padding: 16px;
+}
+
+.card5 {
+  border: 1px solid yellow;
+  padding: 0 16px 0px 16px;
 }

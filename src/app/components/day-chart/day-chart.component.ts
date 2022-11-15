@@ -1,8 +1,16 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import Chart from 'chart.js/auto';
-import { Subject, takeUntil } from 'rxjs';
-import { AirnodeQueryDataService } from 'src/app/services/airnode-query-data.service';
+import {
+  BehaviorSubject,
+  forkJoin,
+  observable,
+  Observable,
+  Observer,
+  Subject,
+  takeUntil,
+} from 'rxjs';
+import { DataCurrentDayService } from 'src/app/services/data-current-day.service';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
 import { M_CHRT_TEXT } from '../chart/main-chart-text.data';
 
@@ -13,43 +21,25 @@ import { M_CHRT_TEXT } from '../chart/main-chart-text.data';
 })
 export class DayChartComponent implements OnInit, OnDestroy {
   @Input() chartID!: string;
-  startQueryTimeStamp!: string;
-  endQueryTimeStamp!: string;
 
-  public dayChart!: Chart;
+  public chart!: Chart;
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    public _aQueryNodeData: AirnodeQueryDataService,
+    public _aNodeCurrentDay: DataCurrentDayService,
     public _dateCalc: DateCalculationService
-  ) {
-    this.startQueryTimeStamp = this._dateCalc.getNowTimeStamp().firstOfDay;
-    this.endQueryTimeStamp = this._dateCalc.getLastTimeStamp();
-
-    /*     this.startQueryTimeStamp = this._dateCalc.getYesterdayFirstTimeStamp();
-    this.endQueryTimeStamp = this._dateCalc.getNowTimeStamp().firstOfDay; */
-
-    this._aQueryNodeData.getData(
-      this.startQueryTimeStamp,
-      this.endQueryTimeStamp
-    );
-  }
+  ) {}
 
   ngOnInit(): void {
     this.createChart();
 
-    this._aQueryNodeData.userData
+    this._aNodeCurrentDay.userData
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
-        /* console.log(
-          '%cchart.component.ts line:26 data',
-          'color: #007acc;',
-          data
-        ); */
-        this.dayChart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
+        this.chart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
 
-        this.dayChart.data.datasets[0] = {
+        this.chart.data.datasets[0] = {
           label: M_CHRT_TEXT.chrtLblUsers,
           yAxisID: 'yAxis0',
           type: 'line',
@@ -62,21 +52,15 @@ export class DayChartComponent implements OnInit, OnDestroy {
           data: data.map((dataIn) => dataIn.users),
         };
 
-        this.dayChart.update();
+        this.chart.update();
       });
 
-    this._aQueryNodeData.networkData
+    this._aNodeCurrentDay.networkData
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
-        /* console.log(
-          '%cchart.component.ts line:72 data',
-          'color: #007acc;',
-          data
-        ); */
+        this.chart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
 
-        this.dayChart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
-
-        this.dayChart.data.datasets[1] = {
+        this.chart.data.datasets[1] = {
           label: M_CHRT_TEXT.chrtLblNetwork,
           yAxisID: 'yAxis1',
           type: 'bar',
@@ -84,7 +68,7 @@ export class DayChartComponent implements OnInit, OnDestroy {
           data: data.map((dataIn) => dataIn.network),
         };
 
-        this.dayChart.options.scales = {
+        this.chart.options.scales = {
           yAxis0: {
             grid: { display: false },
             //beginAtZero: false,
@@ -113,7 +97,7 @@ export class DayChartComponent implements OnInit, OnDestroy {
           },
         };
 
-        this.dayChart.update();
+        this.chart.update();
       });
   }
 
@@ -124,7 +108,7 @@ export class DayChartComponent implements OnInit, OnDestroy {
 
   createChart() {
     Chart.defaults.color = '#fff';
-    this.dayChart = new Chart(this.chartID, {
+    this.chart = new Chart(this.chartID, {
       data: {
         labels: [],
         datasets: [],

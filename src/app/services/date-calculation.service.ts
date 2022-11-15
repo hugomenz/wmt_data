@@ -85,11 +85,20 @@ export class DateCalculationService {
   }
 
   getYesterdayFirstTimeStamp() {
-    return (
+    let yesterday =
       (Number(this.getNowTimeStamp().noHour.slice(0, 2)) - 1).toString() +
       this.getNowTimeStamp().noHour.slice(2, 10) +
-      ' 00:00:00'
-    );
+      ' 00:00:00';
+    return {
+      firstOfDay: yesterday,
+
+      standard: `
+      ${this.getDayName(yesterday).dayShort}
+      ${yesterday.split('-')[0]}
+      ${this.getDayName(yesterday).monthShort}
+      ${yesterday.split('-')[2].slice(0, 4)}
+      GMT+0100`, //`Sat Nov 12 2022 GMT+0100`,
+    };
   }
 
   // TODO Crea las funciones para filtrar el grafico principal 1D 7D 15D 1M 3M 6M 1Y

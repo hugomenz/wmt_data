@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AirnodeQueryDataService } from 'src/app/services/airnode-query-data.service';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
 import { M_CHRT_TEXT } from '../../components/chart/main-chart-text.data';
 
@@ -9,14 +8,16 @@ import { M_CHRT_TEXT } from '../../components/chart/main-chart-text.data';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  constructor(
-    public _queryANodeData: AirnodeQueryDataService,
-    public _dateCalc: DateCalculationService
-  ) {}
+  constructor(public _dateCalc: DateCalculationService) {}
   mainChartTitle = M_CHRT_TEXT.chrtTitle;
 
-  chart24Title =
+  chartCurrentDayTitle =
     M_CHRT_TEXT.chrt24Title + '.  ' + this._dateCalc.getNowTimeStamp().standard;
+
+  chartPreviousDayTitle =
+    M_CHRT_TEXT.chrt24Title +
+    '.  ' +
+    this._dateCalc.getYesterdayFirstTimeStamp().standard;
 
   ngOnInit(): void {}
 }

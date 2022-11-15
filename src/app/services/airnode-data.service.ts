@@ -16,7 +16,7 @@ export class AirnodeDataService {
   );
   public readonly wmtData: Observable<AirNodes[]> =
     this.wmtDataSubject.asObservable();
-  // comeme la pinga?
+
   private networkDataSubject: BehaviorSubject<Network[]> = new BehaviorSubject(
     [] as Network[]
   );
@@ -67,16 +67,4 @@ export class AirnodeDataService {
   }
 
   ngOnInit(): void {}
-
-  getAirNodesData() {
-    console.log(this.aNodeData);
-  }
-
-  getUserData() {
-    console.log(this.userData);
-  }
-
-  getNetworkData() {
-    console.log(this.networkData);
-  }
 }

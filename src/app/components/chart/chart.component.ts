@@ -14,16 +14,17 @@ import { DateCalculationService } from 'src/app/services/date-calculation.servic
 export class ChartComponent implements OnInit, OnDestroy {
   @Input() chartID!: string;
   public chart!: Chart;
+
   destroy$: Subject<boolean> = new Subject<boolean>();
+
   constructor(public _aNodeData: AirnodeDataService) {}
 
   ngOnInit(): void {
     this.createChart();
-
     this._aNodeData.userData
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
-        console.log(data);
+        //console.log(data);
         this.chart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
 
         this.chart.data.datasets[0] = {
