@@ -10,7 +10,7 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { DataCurrentDayService } from 'src/app/services/data-current-day.service';
+import { DataCurrentDayService } from 'src/app/services/airnode-data/data-current-day.service';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
 import { M_CHRT_TEXT } from '../chart/main-chart-text.data';
 

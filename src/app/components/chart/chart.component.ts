@@ -1,10 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AirnodeDataService } from '../../services/airnode-data.service';
+import { AirnodeDataService } from '../../services/airnode-data/airnode-data.service';
 
 import Chart, { layouts } from 'chart.js/auto';
 import { Subject, takeUntil } from 'rxjs';
 import { M_CHRT_TEXT } from './main-chart-text.data';
-import { DateCalculationService } from 'src/app/services/date-calculation.service';
 
 @Component({
   selector: 'app-chart',
