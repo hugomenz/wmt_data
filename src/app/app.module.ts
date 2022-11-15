@@ -28,6 +28,10 @@ import { ToolbarComponent } from './layout/toolbar/toolbar.component';
 import { SupportComponent } from './layout/support/support.component';
 import { AboutComponent } from './layout/about/about.component';
 import { DayChartComponent } from './components/day-chart/day-chart.component';
+import { HeatmapComponent } from './components/heatmap/heatmap.component';
+import { MainChartComponent } from './components/main-chart/main-chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+
 const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -43,6 +47,8 @@ const routes: Routes = [
     SupportComponent,
     AboutComponent,
     DayChartComponent,
+    HeatmapComponent,
+    MainChartComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -62,6 +68,7 @@ const routes: Routes = [
     MatCardModule,
     MatMenuModule,
     AppRoutingModule,
+    NgxChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

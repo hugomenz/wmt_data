@@ -1,21 +1,16 @@
 <div class="main-cards">
   <app-card title="{{ mainChartTitle }}" class="card1">
-    <app-chart></app-chart>
+    <app-chart chartID="MyChart"></app-chart>
   </app-card>
 
   <div class="column">
-    <app-card
-      class="card2"
-      title=" 24h Chart. User and Network Consumption [GB] Thursday. 10-11-2022"
-    >
+    <app-card class="card2" title="{{ chart24Title }}">
       <app-day-chart chartID="dayChart"></app-day-chart>
     </app-card>
 
-    <app-card
-      class="card3"
-      title=" 24h Chart. User and Network Consumption [GB] Thursday. 10-11-2022"
-    >
-      <app-day-chart chartID="dayChart2"></app-day-chart>
+    <app-card class="card3" title=" Week overview Heatmap">
+      <app-main-chart></app-main-chart>
+      <!--  <app-heatmap chartID="heatMap"></app-heatmap> -->
     </app-card>
   </div>
 </div>

@@ -4,4 +4,5 @@ export const M_CHRT_TEXT = {
   chrtAxisNetwork: 'Network consumption [GB]',
   chrtLblUsers: 'Number of users',
   chrtAxisUsers: 'Number of users connected to WMT network',
+  chrt24Title: '24h Chart. User and Network Consumption [GB]',
 };

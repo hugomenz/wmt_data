@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AirnodeDataService } from '../../services/airnode-data.service';
 
-import Chart from 'chart.js/auto';
+import Chart, { layouts } from 'chart.js/auto';
 import { Subject, takeUntil } from 'rxjs';
 import { M_CHRT_TEXT } from './main-chart-text.data';
+import { DateCalculationService } from 'src/app/services/date-calculation.service';
 
 @Component({
   selector: 'app-chart',
@@ -11,6 +12,7 @@ import { M_CHRT_TEXT } from './main-chart-text.data';
   styleUrls: ['./chart.component.scss'],
 })
 export class ChartComponent implements OnInit, OnDestroy {
+  @Input() chartID!: string;
   public chart!: Chart;
   destroy$: Subject<boolean> = new Subject<boolean>();
   constructor(public _aNodeData: AirnodeDataService) {}
@@ -21,13 +23,8 @@ export class ChartComponent implements OnInit, OnDestroy {
     this._aNodeData.userData
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
-        /* console.log(
-          '%cchart.component.ts line:26 data',
-          'color: #007acc;',
-          data
-        ) */ this.chart.data.labels = data.map((dataIn) =>
-          dataIn.t.slice(0, -3)
-        );
+        console.log(data);
+        this.chart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
 
         this.chart.data.datasets[0] = {
           label: M_CHRT_TEXT.chrtLblUsers,
@@ -37,7 +34,6 @@ export class ChartComponent implements OnInit, OnDestroy {
           tension: 0.4,
           fill: true,
           backgroundColor: 'rgba(208, 27, 108, 0.15)',
-          //backgroundColor: 'rgba(253, 126, 23, 0.08)',
           borderColor: '#FD7E14',
           data: data.map((dataIn) => dataIn.users),
         };
@@ -48,13 +44,7 @@ export class ChartComponent implements OnInit, OnDestroy {
     this._aNodeData.networkData
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
-        /* console.log(
-          '%cchart.component.ts line:26 data',
-          'color: #007acc;',
-          data
-        ) */ this.chart.data.labels = data.map((dataIn) =>
-          dataIn.t.slice(0, -3)
-        );
+        this.chart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
 
         this.chart.data.datasets[1] = {
           label: M_CHRT_TEXT.chrtLblNetwork,
@@ -64,30 +54,32 @@ export class ChartComponent implements OnInit, OnDestroy {
           data: data.map((dataIn) => dataIn.network),
         };
 
-        this.chart.options.scales = {
-          yAxis0: {
-            grid: { display: false },
-            beginAtZero: false,
-            position: 'right',
-            title: {
-              display: true,
-              text: M_CHRT_TEXT.chrtAxisUsers,
+        this.chart.options = {
+          scales: {
+            yAxis0: {
+              grid: { display: false },
+              beginAtZero: false,
+              position: 'right',
+              title: {
+                display: true,
+                text: M_CHRT_TEXT.chrtAxisUsers,
+              },
+              ticks: { font: { size: 12 } },
             },
-            ticks: { font: { size: 12 } },
-          },
-          yAxis1: {
-            grid: { display: false },
-            beginAtZero: false,
-            position: 'left',
-            title: {
-              display: true,
-              text: M_CHRT_TEXT.chrtAxisNetwork,
+            yAxis1: {
+              grid: { display: false },
+              beginAtZero: false,
+              position: 'left',
+              title: {
+                display: true,
+                text: M_CHRT_TEXT.chrtAxisNetwork,
+              },
+              ticks: { font: { size: 12 } },
             },
-            ticks: { font: { size: 12 } },
-          },
-          x: {
-            grid: { display: false },
-            ticks: { font: { size: 10 } },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 10 } },
+            },
           },
         };
 
@@ -102,7 +94,7 @@ export class ChartComponent implements OnInit, OnDestroy {
 
   createChart() {
     Chart.defaults.color = '#fff';
-    this.chart = new Chart('MyChart', {
+    this.chart = new Chart(this.chartID, {
       data: {
         labels: [],
         datasets: [],

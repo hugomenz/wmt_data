@@ -6,7 +6,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './layout/dashboard/dashboard.component';
 
 const routes: Routes = [
-  { path: 'dashboard', component: DashboardComponent },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+  },
   {
     path: 'support',
     component: SupportComponent,

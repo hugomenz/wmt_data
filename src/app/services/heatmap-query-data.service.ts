@@ -11,7 +11,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class AirnodeQueryDataService {
+export class HeatmapQueryDataService {
   private wmtDataSubject: BehaviorSubject<AirNodes[]> = new BehaviorSubject(
     [] as AirNodes[]
   );

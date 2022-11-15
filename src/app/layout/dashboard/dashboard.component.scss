@@ -1,7 +1,7 @@
 .main-cards {
   display: flex;
   flex-direction: column;
-  background: rgb(208, 27, 108);
+
   background: linear-gradient(
     124deg,
     rgba(208, 27, 108, 1) 0%,
@@ -27,5 +27,4 @@
 }
 .card3 {
   padding-right: 16px;
-  width: 48vw;
 }

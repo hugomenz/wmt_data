@@ -1,36 +1,35 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import Chart from 'chart.js/auto';
 import { Subject, takeUntil } from 'rxjs';
 import { AirnodeQueryDataService } from 'src/app/services/airnode-query-data.service';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
+import { HeatmapQueryDataService } from 'src/app/services/heatmap-query-data.service';
 import { M_CHRT_TEXT } from '../chart/main-chart-text.data';
 
 @Component({
-  selector: 'app-day-chart',
-  templateUrl: './day-chart.component.html',
-  styleUrls: ['./day-chart.component.scss'],
+  selector: 'app-heatmap',
+  templateUrl: './heatmap.component.html',
+  styleUrls: ['./heatmap.component.scss'],
 })
-export class DayChartComponent implements OnInit, OnDestroy {
+export class HeatmapComponent implements OnInit, OnDestroy {
   @Input() chartID!: string;
+
+  @ViewChild('', { static: true })
   startQueryTimeStamp!: string;
   endQueryTimeStamp!: string;
-
-  public dayChart!: Chart;
+  public heatMap!: Chart;
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
-    public _aQueryNodeData: AirnodeQueryDataService,
+    public _heatQueryData: HeatmapQueryDataService,
     public _dateCalc: DateCalculationService
   ) {
-    this.startQueryTimeStamp = this._dateCalc.getNowTimeStamp().firstOfDay;
-    this.endQueryTimeStamp = this._dateCalc.getLastTimeStamp();
+    this.startQueryTimeStamp = this._dateCalc.getYesterdayFirstTimeStamp();
+    this.endQueryTimeStamp = this._dateCalc.getNowTimeStamp().firstOfDay;
 
-    /*     this.startQueryTimeStamp = this._dateCalc.getYesterdayFirstTimeStamp();
-    this.endQueryTimeStamp = this._dateCalc.getNowTimeStamp().firstOfDay; */
-
-    this._aQueryNodeData.getData(
+    this._heatQueryData.getData(
       this.startQueryTimeStamp,
       this.endQueryTimeStamp
     );
@@ -39,7 +38,7 @@ export class DayChartComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.createChart();
 
-    this._aQueryNodeData.userData
+    this._heatQueryData.userData
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
         /* console.log(
@@ -47,9 +46,9 @@ export class DayChartComponent implements OnInit, OnDestroy {
           'color: #007acc;',
           data
         ); */
-        this.dayChart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
+        this.heatMap.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
 
-        this.dayChart.data.datasets[0] = {
+        this.heatMap.data.datasets[0] = {
           label: M_CHRT_TEXT.chrtLblUsers,
           yAxisID: 'yAxis0',
           type: 'line',
@@ -57,15 +56,14 @@ export class DayChartComponent implements OnInit, OnDestroy {
           tension: 0.4,
           fill: true,
           backgroundColor: 'rgba(208, 27, 108, 0.15)',
-          //backgroundColor: 'rgba(253, 126, 23, 0.08)',
           borderColor: '#FD7E14',
           data: data.map((dataIn) => dataIn.users),
         };
 
-        this.dayChart.update();
+        this.heatMap.update();
       });
 
-    this._aQueryNodeData.networkData
+    this._heatQueryData.networkData
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
         /* console.log(
@@ -74,9 +72,9 @@ export class DayChartComponent implements OnInit, OnDestroy {
           data
         ); */
 
-        this.dayChart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
+        this.heatMap.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
 
-        this.dayChart.data.datasets[1] = {
+        this.heatMap.data.datasets[1] = {
           label: M_CHRT_TEXT.chrtLblNetwork,
           yAxisID: 'yAxis1',
           type: 'bar',
@@ -84,7 +82,7 @@ export class DayChartComponent implements OnInit, OnDestroy {
           data: data.map((dataIn) => dataIn.network),
         };
 
-        this.dayChart.options.scales = {
+        this.heatMap.options.scales = {
           yAxis0: {
             grid: { display: false },
             //beginAtZero: false,
@@ -113,7 +111,7 @@ export class DayChartComponent implements OnInit, OnDestroy {
           },
         };
 
-        this.dayChart.update();
+        this.heatMap.update();
       });
   }
 
@@ -123,8 +121,7 @@ export class DayChartComponent implements OnInit, OnDestroy {
   }
 
   createChart() {
-    Chart.defaults.color = '#fff';
-    this.dayChart = new Chart(this.chartID, {
+    this.heatMap = new Chart('heatMap', {
       data: {
         labels: [],
         datasets: [],
@@ -135,5 +132,7 @@ export class DayChartComponent implements OnInit, OnDestroy {
         maintainAspectRatio: false,
       },
     });
+
+    Chart.defaults.color = '#fff';
   }
 }
