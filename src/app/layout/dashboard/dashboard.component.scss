@@ -11,36 +11,41 @@
 }
 
 .card1 {
-  border: 1px solid yellow;
+  // border: 1px solid yellow;
+
   padding: 16px;
+  height: 100%;
 }
 
 .column {
-  border: 1px solid yellow;
-  width: 99%;
-
+  //border: 1px solid yellow;
+  //width: 99%;
+  //min-height: 500px;
   display: flex;
   justify-content: space-between;
+  padding-bottom: 16px;
   //padding-right: 4rem;
 }
 
 .card2 {
-  border: 1px solid yellow;
-  padding-left: 16px;
+  //border: 1px solid yellow;
   width: 48vw;
+  padding-left: 16px;
+  padding-right: 8px;
 }
 .card3 {
-  border: 1px solid yellow;
-  //padding-right: 16px;
+  //border: 1px solid yellow;
+  padding-right: 16px;
+  padding-left: 8px;
   width: 48vw;
 }
 
 .card4 {
-  border: 1px solid yellow;
-  padding: 16px;
+  //border: 1px solid yellow;
+  padding: 0px 16px 16px 16px;
 }
 
 .card5 {
-  border: 1px solid yellow;
+  //border: 1px solid yellow;
   padding: 0 16px 0px 16px;
 }

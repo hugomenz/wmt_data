@@ -19,7 +19,8 @@ export class DashboardComponent implements OnInit {
   chartPreviousDayTitle =
     M_CHRT_TEXT.chrtPreviousDayTitle +
     '.  ' +
-    this._dateCalc.getYesterdayFirstTimeStamp().standard;
+    this._dateCalc.getPreviousDay(this._dateCalc.getNowTimeStamp().noHour, 1)
+      .title;
 
   ngOnInit(): void {}
 }

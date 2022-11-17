@@ -1,25 +1,43 @@
 <div class="main-cards">
   <app-card title="{{ mainChartTitle }}" class="card1">
-    <app-chart chartID="MyChart"></app-chart>
+    <app-chart
+      chartID="main"
+      [daysBack]="7"
+      [currentDay]="true"
+      [aspectRatio]="3"
+    ></app-chart>
   </app-card>
 
   <div class="column">
     <app-card class="card2" title="{{ chartPreviousDayTitle }}">
-      <app-last-day-chart chartID="lastDayChart"></app-last-day-chart>
+      <app-chart
+        chartID="previous"
+        [daysBack]="1"
+        [currentDay]="false"
+        [aspectRatio]="2"
+      ></app-chart>
     </app-card>
 
     <app-card class="card3" title=" {{ chartCurrentDayTitle }}">
-      <app-day-chart chartID="dayChart"></app-day-chart>
+      <app-chart
+        chartID="current"
+        [daysBack]="0"
+        [currentDay]="true"
+        [aspectRatio]="2"
+      ></app-chart>
     </app-card>
   </div>
 
-  <app-card title="7 days comparaison chart" class="card4">
-    <!-- <app-chart chartID="MyChart"></app-chart> -->
+  <app-card title="Weekly Comparison Unique Users 24h" class="card4">
+    <app-comp-chart
+      chartID="comp"
+      [daysBack]="7"
+      [currentDay]="true"
+      [aspectRatio]="2"
+    ></app-comp-chart>
   </app-card>
 
-  <app-card title="Heatmap Last 7 days" class="card5">
-    <!-- <app-chart chartID="MyChart"></app-chart> -->
-  </app-card>
+  <app-card title="Heatmap Last 7 days" class="card5"> </app-card>
 </div>
 
 <!--  -->

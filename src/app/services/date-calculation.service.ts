@@ -84,21 +84,46 @@ export class DateCalculationService {
     //this.getNowTimeStamp().full.slice(0, 13)
   }
 
-  getYesterdayFirstTimeStamp() {
-    let yesterday =
-      (Number(this.getNowTimeStamp().noHour.slice(0, 2)) - 1).toString() +
-      this.getNowTimeStamp().noHour.slice(2, 10) +
-      ' 00:00:00';
-    return {
-      firstOfDay: yesterday,
+  getPreviousDay(dateString: string, dayBack: number) {
+    const formatedDateString = this.changeToStandardFormat(dateString);
+    const date = new Date(formatedDateString);
+    const previous = new Date(date.getTime());
+    previous.setDate(date.getDate() - dayBack);
 
-      standard: `
-      ${this.getDayName(yesterday).dayShort}
-      ${yesterday.split('-')[0]}
-      ${this.getDayName(yesterday).monthShort}
-      ${yesterday.split('-')[2].slice(0, 4)}
-      GMT+0100`, //`Sat Nov 12 2022 GMT+0100`,
+    const yyyy = previous.getFullYear();
+    let mm = previous.getMonth() + 1; // Months start at 0!
+    let dd = previous.getDate();
+
+    let day: string = dd.toString();
+    let month: string = mm.toString();
+
+    if (dd < 10) day = '0' + dd;
+    if (mm < 10) month = '0' + mm;
+
+    return {
+      objFormated: `${day}-${month}-${yyyy} 00:00:00`,
+      title: this.prepareDateForTitle(
+        previous.toString().split('(')[0].split(' '),
+        4
+      ),
     };
+  }
+
+  prepareDateForTitle(arr: string[], index: number) {
+    arr.splice(index, 1);
+    arr.splice(arr.length - 1, 1);
+
+    return arr.join(' ');
+  }
+
+  changeToStandardFormat(stringDate: string) {
+    // 31-12-2022 00:00:00 --> 2022-12-31
+    const splitText = stringDate.slice(0, 10).split('-');
+    const day = splitText[0];
+    const month = splitText[1];
+    const year = splitText[2];
+
+    return `${year}-${month}-${day}`;
   }
 
   // TODO Crea las funciones para filtrar el grafico principal 1D 7D 15D 1M 3M 6M 1Y
