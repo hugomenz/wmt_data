@@ -25,6 +25,8 @@ import { provideStorage, getStorage } from '@angular/fire/storage';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AngularMaterialModule } from './angular-material.module';
 import { CompChartComponent } from './components/comp-chart/comp-chart.component';
+import { HeatmapComponent } from './components/heatmap/heatmap.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,7 @@ import { CompChartComponent } from './components/comp-chart/comp-chart.component
     SupportComponent,
     AboutComponent,
     CompChartComponent,
+    HeatmapComponent,
   ],
   imports: [
     RouterModule,
@@ -49,6 +52,7 @@ import { CompChartComponent } from './components/comp-chart/comp-chart.component
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     AngularFireModule.initializeApp(environment.firebase),
+    NgApexchartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

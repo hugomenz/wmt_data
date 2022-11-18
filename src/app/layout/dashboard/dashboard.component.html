@@ -31,13 +31,26 @@
   <app-card title="Weekly Comparison Unique Users 24h" class="card4">
     <app-comp-chart
       chartID="comp"
+      dataType="users"
       [daysBack]="7"
       [currentDay]="true"
-      [aspectRatio]="2"
+      [aspectRatio]="2.5"
     ></app-comp-chart>
   </app-card>
 
-  <app-card title="Heatmap Last 7 days" class="card5"> </app-card>
+  <app-card title="Weekly Comparison Network Usage 24h" class="card5">
+    <app-comp-chart
+      chartID="net-comp"
+      dataType="network"
+      [daysBack]="7"
+      [currentDay]="true"
+      [aspectRatio]="2.5"
+    ></app-comp-chart>
+  </app-card>
+
+  <app-card title="Heatmap Last 7 days" class="card6">
+    <app-heatmap></app-heatmap
+  ></app-card>
 </div>
 
 <!--  -->

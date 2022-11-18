@@ -22,8 +22,11 @@
     "@angular/platform-browser-dynamic": "^14.2.10",
     "@angular/router": "^14.2.10",
     "@swimlane/ngx-charts": "^20.1.0",
+    "apexcharts": "^3.36.3",
     "chart.js": "^3.9.1",
+    "chartjs-plugin-annotation": "^2.1.0",
     "clone-deep": "^4.0.1",
+    "ng-apexcharts": "^1.7.4",
     "rxjs": "~7.5.0",
     "zone.js": "~0.11.4"
   },

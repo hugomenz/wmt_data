@@ -14,6 +14,10 @@ import { AirnodeDataService } from 'src/app/services/airnode-data/airnode-data.s
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
 import { AirNodes, Users } from 'src/interfaces/data-firestore.interface';
 import { M_CHRT_TEXT } from '../chart/main-chart-text.data';
+import * as ChartAnnotation from 'chartjs-plugin-annotation';
+import { ChartOptions } from 'chart.js';
+import { line } from 'd3';
+import { mean, median } from './helpers';
 
 type GroupUserData = {
   [key: string]: AirNodes[];
@@ -25,23 +29,26 @@ type GroupUserData = {
   styleUrls: ['./comp-chart.component.scss'],
 })
 export class CompChartComponent implements OnInit, OnDestroy {
-  @Input() chartID: string = 'comp';
+  @Input() chartID!: string;
   @Input() daysBack: number = 7;
   @Input() currentDay: boolean = true;
   @Input() aspectRatio: number = 2;
+  @Input() dataType: string = 'users'; // or network_consumption
+
   //dateFrom!: string;
   dateFrom: string = this._dateCalc.getNowTimeStamp().firstOfDay;
   dateEnd!: string;
 
+  nDataList!: number[];
+
   chartLineColor: string[] = [
-    '#ff6961',
-    '#ffb480',
-    '#f8f38d',
-    '#42d6a4',
-    '#08cad1',
-    '#59adf6',
-    '#9d94ff',
+    '#FF0000',
+    '#FF7F00',
     '#FFFF00',
+    '#00FF00',
+    '#0000FF',
+    '#4B0082',
+    '#FF10F0',
   ];
 
   public chart!: Chart;
@@ -75,7 +82,8 @@ export class CompChartComponent implements OnInit, OnDestroy {
       .getData(this.dateFrom, this.dateEnd)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
-        // I need a
+        // Array of unique dates is needed to group the data
+        // to display the multiline chart
         data.map((obj) => {
           if (
             obj.timestamp.slice(0, 10) !=
@@ -84,8 +92,7 @@ export class CompChartComponent implements OnInit, OnDestroy {
             this.uniqDateArray.push(obj.timestamp.slice(0, 10));
         });
 
-        //console.log(this.uniqDateArray);
-
+        // Object for multiline chart.
         this.uniqDateArray.map((uniqDate) => {
           this.groupDateData[uniqDate] = data.filter(
             ({ timestamp }) => timestamp.slice(0, 10) == uniqDate
@@ -95,117 +102,112 @@ export class CompChartComponent implements OnInit, OnDestroy {
           ].map((dataIn) => dataIn.timestamp.slice(10, 19));
         });
 
-        /* this.chart.data.labels = this.groupDateData[uniqDate].map(
-          (dataIn) => dataIn.timestamp
-        ); */
+        // Weekly mean
+        this.nDataList = data.map((obj) =>
+          this.dataType == 'users'
+            ? obj.users
+            : this.dataType == 'network'
+            ? obj.network_usage / (1024 * 1024 * 1024)
+            : obj.airnodes
+        );
 
         this.uniqDateArray.forEach((uniqDate, index) => {
+          console.log('---------------');
+          console.log(index);
+          console.log(uniqDate);
+          console.log(this.chartLineColor[index]);
+          console.log(
+            'index!=this.uniqDateArray.length - 1',
+            index != this.uniqDateArray.length - 1
+          );
+
           this.chart.data.datasets[index] = {
-            label: uniqDate,
+            label:
+              index != this.uniqDateArray.length - 1
+                ? uniqDate
+                : `Today ${uniqDate}`,
+
             //yAxisID: 'yAxis0',
+            borderWidth:
+              index != this.uniqDateArray.length - 1 ? 0.75 * (index + 1) : 8,
             type: 'line',
             pointStyle: 'dash',
             tension: 0.4,
             fill: false,
             //backgroundColor: 'rgba(208, 27, 108, 0.15)',
-            borderColor: this.chartLineColor[index],
-            data: this.groupDateData[uniqDate].map((dataIn) => dataIn.users),
+            borderColor: index == 7 ? '#08f7fe' : this.chartLineColor[index],
+            data: this.groupDateData[uniqDate].map((dataIn) =>
+              this.dataType == 'users'
+                ? dataIn.users
+                : this.dataType == 'network'
+                ? dataIn.network_usage / (1024 * 1024 * 1024)
+                : dataIn.airnodes
+            ),
           };
+          console.log('----after dataset');
+          console.log(uniqDate);
+          console.log(this.chartLineColor[index]);
         });
 
-        /* this.chart.data.datasets[1] = {
-          label: M_CHRT_TEXT.chrtLblNetwork,
-          yAxisID: 'yAxis1',
-          type: 'bar',
-          backgroundColor: 'rgba(90, 35, 149, 0.7)',
-          data: data.map(
-            (dataIn) => dataIn.network_usage / (1024 * 1024 * 1024)
-          ),
-        }; */
-
-        /* this.chart.options.scales = {
-          yAxis0: {
-            grid: { display: false },
-            //beginAtZero: false,
-            //min: 13000,
-            position: 'right',
-            title: {
-              display: true,
-              text: M_CHRT_TEXT.chrtAxisUsers,
-            },
-            ticks: { font: { size: 12 } },
-          },
-          yAxis1: {
-            grid: { display: false },
-            beginAtZero: false,
-            //min: 950,
-            position: 'left',
-            title: {
-              display: true,
-              text: M_CHRT_TEXT.chrtAxisNetwork,
-            },
-            ticks: { font: { size: 12 } },
-          },
-          x: {
-            grid: { display: false },
-            ticks: { font: { size: 10 } },
-          },
-        }; */
-
-        this.chart.update();
-      });
-
-    //this._aNodeData.getData('10-11-2022 00:00:00');
-
-    /* this._aNodeData.userData
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        // I need a
-        data.map((obj) => {
-          if (
-            obj.t.slice(0, 10) !=
-            this.uniqDateArray[this.uniqDateArray.length - 1]
-          )
-            this.uniqDateArray.push(obj.t.slice(0, 10));
-        });
-
-        this.uniqDateArray.map((uniqDate) => {
-          this.groupDateData[uniqDate] = data.filter(
-            ({ t }) => t.slice(0, 10) == uniqDate
-          );
-        });
-        //console.log(this.uniqDateArray);
-        console.log(this.groupDateData); */
-
-    /*       this.chart.data.labels = data.map((dataIn) => dataIn.t.slice(0, -3));
-
-        this.chart.data.datasets[0] = {
-          label: M_CHRT_TEXT.chrtLblUsers,
-          yAxisID: 'yAxis0',
+        // length of array: the lines come after data is displayed
+        this.chart.data.datasets[this.uniqDateArray.length] = {
+          label: 'Weekly Mean',
+          //yAxisID: 'yAxis0',
+          borderWidth: 2,
           type: 'line',
           pointStyle: 'dash',
           tension: 0.4,
-          fill: true,
-          backgroundColor: 'rgba(208, 27, 108, 0.15)',
-          //backgroundColor: 'rgba(253, 126, 23, 0.08)',
-          borderColor: '#FD7E14',
-          data: data.map((dataIn) => dataIn.users),
+          fill: false,
+          //backgroundColor: 'rgba(208, 27, 108, 0.15)',
+          borderColor: '#9CFF2E',
+          data: Array(96).fill(mean(this.nDataList)),
+          borderDash: [20, 20],
         };
-        this.chart.options.scales = {
-          yAxis0: {
-            grid: { display: false },
-            //beginAtZero: false,
-            //min: 13000,
-            position: 'right',
-            title: {
-              display: true,
-              text: M_CHRT_TEXT.chrtAxisUsers,
-            },
-            ticks: { font: { size: 12 } },
-          },
+
+        this.chart.data.datasets[this.uniqDateArray.length + 1] = {
+          label: 'Weekly Median',
+          //yAxisID: 'yAxis0',
+          borderWidth: 2,
+          type: 'line',
+          pointStyle: 'dash',
+          tension: 0.4,
+          fill: false,
+          //backgroundColor: 'rgba(208, 27, 108, 0.15)',
+          borderColor: '#FFFF00',
+          data: Array(96).fill(median(this.nDataList)),
+          borderDash: [20, 20],
         };
+
+        this.chart.data.datasets[this.uniqDateArray.length + 2] = {
+          label: 'Weekly Max',
+          //yAxisID: 'yAxis0',
+          borderWidth: 1,
+          type: 'line',
+          pointStyle: 'dash',
+          tension: 0.4,
+          fill: false,
+          //backgroundColor: 'rgba(208, 27, 108, 0.15)',
+          borderColor: 'red',
+          data: Array(96).fill(Math.max(...this.nDataList)),
+          borderDash: [10, 10],
+        };
+
+        this.chart.data.datasets[this.uniqDateArray.length + 3] = {
+          label: 'Weekly Min',
+          //yAxisID: 'yAxis0',
+          borderWidth: 1,
+          type: 'line',
+          pointStyle: 'dash',
+          tension: 0.4,
+          fill: false,
+          //backgroundColor: 'rgba(208, 27, 108, 0.15)',
+          borderColor: 'red',
+          data: Array(96).fill(Math.min(...this.nDataList)),
+          borderDash: [10, 10],
+        };
+
         this.chart.update();
-      }); */
+      });
   }
 
   ngAfterViewInit() {
@@ -227,7 +229,7 @@ export class CompChartComponent implements OnInit, OnDestroy {
         datasets: [],
       },
       options: {
-        aspectRatio: 2.5,
+        aspectRatio: this.aspectRatio,
         responsive: true,
         maintainAspectRatio: false,
       },
