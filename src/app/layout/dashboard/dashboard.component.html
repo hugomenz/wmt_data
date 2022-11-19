@@ -27,30 +27,41 @@
       ></app-chart>
     </app-card>
   </div>
+  <div class="comp-box">
+    <app-card title="Weekly Comparison Unique Users 24h" class="card4">
+      <app-comp-chart
+        chartID="comp"
+        dataType="users"
+        [daysBack]="7"
+        [currentDay]="true"
+        [aspectRatio]="1.5"
+      ></app-comp-chart>
+    </app-card>
 
-  <app-card title="Weekly Comparison Unique Users 24h" class="card4">
-    <app-comp-chart
-      chartID="comp"
-      dataType="users"
-      [daysBack]="7"
-      [currentDay]="true"
-      [aspectRatio]="2.5"
-    ></app-comp-chart>
-  </app-card>
+    <app-card title="Weekly Comparison Network Usage 24h" class="card5">
+      <app-comp-chart
+        chartID="net-comp"
+        dataType="network"
+        [daysBack]="7"
+        [currentDay]="true"
+        [aspectRatio]="1.5"
+      ></app-comp-chart>
+    </app-card>
+  </div>
 
-  <app-card title="Weekly Comparison Network Usage 24h" class="card5">
-    <app-comp-chart
-      chartID="net-comp"
-      dataType="network"
-      [daysBack]="7"
-      [currentDay]="true"
-      [aspectRatio]="2.5"
-    ></app-comp-chart>
-  </app-card>
+  <div class="heat-box">
+    <app-card
+      title="Heatmap Last 7 days 24h Network Consumption "
+      class="card6"
+    >
+      <app-heatmap [daysBack]="7" [currentDay]="true"></app-heatmap
+    ></app-card>
 
-  <app-card title="Heatmap Last 7 days" class="card6">
-    <app-heatmap></app-heatmap
-  ></app-card>
+    <app-card title="Heatmap Last 7 days Network" class="card7">
+      <app-heatmap [daysBack]="7" [currentDay]="true"></app-heatmap>
+      <!--  <app-heatmap></app-heatmap> -->
+    </app-card>
+  </div>
 </div>
 
 <!--  -->

@@ -25,24 +25,24 @@ import {
 export interface ApexOptions {
   annotations?: ApexAnnotations;
   chart: ApexChart;
-  colors?: any[];
+  colors: any[];
   dataLabels: ApexDataLabels;
   fill?: ApexFill;
   forecastDataPoints?: ApexForecastDataPoints;
   grid: ApexGrid;
   labels?: string[];
-  legend?: ApexLegend;
+  legend: ApexLegend;
   markers?: ApexMarkers;
   noData?: ApexNoData;
-  plotOptions?: ApexPlotOptions;
+  plotOptions: ApexPlotOptions;
   responsive?: ApexResponsive[];
   series: ApexAxisChartSeries | ApexNonAxisChartSeries;
   states?: ApexStates;
-  stroke: ApexStroke;
+  stroke?: ApexStroke;
   subtitle?: ApexTitleSubtitle;
   theme?: ApexTheme;
   title: ApexTitleSubtitle;
   tooltip?: ApexTooltip;
-  xaxis: ApexXAxis;
+  xaxis?: ApexXAxis;
   yaxis?: ApexYAxis | ApexYAxis[];
 }

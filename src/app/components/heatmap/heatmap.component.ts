@@ -1,25 +1,15 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChartComponent } from 'ng-apexcharts';
+import { Subject, takeUntil } from 'rxjs';
+import { AirnodeDataService } from 'src/app/services/airnode-data/airnode-data.service';
+import { DateCalculationService } from 'src/app/services/date-calculation.service';
 import {
-  ChartComponent,
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexXAxis,
-  ApexDataLabels,
-  ApexTitleSubtitle,
-  ApexStroke,
-  ApexGrid,
-} from 'ng-apexcharts';
+  CoordinateHeat,
+  GroupUserData,
+  HeatData,
+} from 'src/interfaces/heatmap.interface';
 import { ApexOptions } from 'src/interfaces/ng-apex.interface';
-
-export type ChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  xaxis: ApexXAxis;
-  dataLabels: ApexDataLabels;
-  grid: ApexGrid;
-  stroke: ApexStroke;
-  title: ApexTitleSubtitle;
-};
+import { heatMapGetIntervalData } from 'src/utils/heatmap.utils';
 
 @Component({
   selector: 'app-heatmap',
@@ -27,144 +17,110 @@ export type ChartOptions = {
   styleUrls: ['./heatmap.component.scss'],
 })
 export class HeatmapComponent implements OnInit {
+  @Input() daysBack: number = 7;
+  @Input() currentDay: boolean = true;
+  dateFrom: string = this._dateCalc.getNowTimeStamp().firstOfDay;
+  dateEnd!: string;
+  totalDataList!: number[];
+  maxTotalData!: number;
+  minTotalData!: number;
+  uniqDateArray: string[] = [];
+  groupDateData: GroupUserData = {};
+  heatDataSeries: HeatData[] = [];
+  destroy$: Subject<boolean> = new Subject<boolean>();
+
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ApexOptions> = {} as Partial<ApexOptions>;
 
-  constructor() {}
+  constructor(
+    public _aNodeData: AirnodeDataService,
+    public _dateCalc: DateCalculationService
+  ) {}
 
   ngOnInit(): void {
-    this.chartOptions = {
-      series: [
-        {
-          name: 'Jan',
-          data: this.generateData(20, {
-            min: -30,
-            max: 55,
-          }),
-        },
-        {
-          name: 'Feb',
-          data: this.generateData(20, {
-            min: -30,
-            max: 55,
-          }),
-        },
-        {
-          name: 'Mar',
-          data: this.generateData(20, {
-            min: -30,
-            max: 55,
-          }),
-        },
-        {
-          name: 'Apr',
-          data: this.generateData(20, {
-            min: -30,
-            max: 55,
-          }),
-        },
-        {
-          name: 'May',
-          data: this.generateData(20, {
-            min: -30,
-            max: 55,
-          }),
-        },
-        {
-          name: 'Jun',
-          data: this.generateData(20, {
-            min: -30,
-            max: 55,
-          }),
-        },
-        {
-          name: 'Jul',
-          data: this.generateData(20, {
-            min: -30,
-            max: 55,
-          }),
-        },
-        {
-          name: 'Aug',
-          data: this.generateData(20, {
-            min: -30,
-            max: 55,
-          }),
-        },
-        {
-          name: 'Sep',
-          data: this.generateData(20, {
-            min: -30,
-            max: 55,
-          }),
-        },
-      ],
-      chart: {
-        height: 350,
-        type: 'heatmap',
-      },
-      plotOptions: {
-        heatmap: {
-          shadeIntensity: 0.5,
-          colorScale: {
-            ranges: [
-              {
-                from: -30,
-                to: 5,
-                name: 'low',
-                color: '#00A100',
+    this.uniqDateArray = [];
+
+    this.dateFrom = this._dateCalc.getPreviousDay(
+      this._dateCalc.getNowTimeStamp().firstOfDay,
+      this.daysBack
+    ).objFormated;
+
+    this.dateEnd = this.currentDay
+      ? this._dateCalc.getLastTimeStamp()
+      : this._dateCalc.getNowTimeStamp().firstOfDay;
+
+    this._aNodeData
+      .getData(this.dateFrom, this.dateEnd)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        // Array of unique dates is needed to group the data
+        // to display the multiline chart
+        this.totalDataList = [];
+
+        data.map((obj) => {
+          if (
+            obj.timestamp.slice(0, 10) !=
+            this.uniqDateArray[this.uniqDateArray.length - 1]
+          )
+            this.uniqDateArray.push(obj.timestamp.slice(0, 10));
+
+          this.totalDataList.push(obj.network_usage / (1024 * 1024 * 1024));
+        });
+
+        // Object for multiline chart.
+        this.uniqDateArray.map((uniqDate) => {
+          this.groupDateData[uniqDate] = data.filter(
+            ({ timestamp }) => timestamp.slice(0, 10) == uniqDate
+          );
+
+          this.heatDataSeries.push({
+            name: uniqDate.toString(),
+            data: this.groupDateData[uniqDate].map((obj) => {
+              return {
+                x: obj.timestamp.slice(11, 16),
+                y: obj.network_usage / (1024 * 1024 * 1024),
+              };
+            }),
+          });
+        });
+
+        this.maxTotalData = Math.max(...this.totalDataList);
+        this.minTotalData = Math.min(...this.totalDataList);
+
+        //console.log(heatMapGetIntervalData(this.tempMin, this.tempMax));
+        this.chartOptions = {
+          chart: { height: 500, type: 'heatmap' },
+
+          dataLabels: { enabled: false },
+          grid: {
+            show: false,
+            xaxis: {
+              lines: {
+                show: false,
               },
-              {
-                from: 6,
-                to: 20,
-                name: 'medium',
-                color: '#128FD9',
+            },
+            yaxis: {
+              lines: {
+                show: false,
               },
-              {
-                from: 21,
-                to: 45,
-                name: 'high',
-                color: '#FFB200',
-              },
-              {
-                from: 46,
-                to: 55,
-                name: 'extreme',
-                color: '#FF0000',
-              },
-            ],
+            },
           },
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      title: {
-        text: 'HeatMap Chart with Color Range',
-      },
-    };
-  }
-
-  public generateData(
-    count: number,
-    yrange: {
-      min: number;
-      max: number;
-    }
-  ) {
-    var i = 0;
-    var series = [];
-    while (i < count) {
-      var x = 'w' + (i + 1).toString();
-      var y =
-        Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-
-      series.push({
-        x: x,
-        y: y,
+          plotOptions: {
+            heatmap: {
+              shadeIntensity: 0.5,
+              distributed: true,
+              colorScale: {
+                ranges: heatMapGetIntervalData(
+                  this.minTotalData,
+                  this.maxTotalData
+                ),
+              },
+            },
+          },
+          legend: { show: false },
+          series: this.heatDataSeries,
+          title: { text: 'HeatMap Chart with Color Range' },
+        };
       });
-      i++;
-    }
-    return series;
   }
 }

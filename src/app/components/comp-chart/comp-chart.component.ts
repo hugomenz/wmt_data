@@ -1,27 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-
 import Chart from 'chart.js/auto';
-import {
-  BehaviorSubject,
-  forkJoin,
-  observable,
-  Observable,
-  Observer,
-  Subject,
-  takeUntil,
-} from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { AirnodeDataService } from 'src/app/services/airnode-data/airnode-data.service';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
-import { AirNodes, Users } from 'src/interfaces/data-firestore.interface';
-import { M_CHRT_TEXT } from '../chart/main-chart-text.data';
-import * as ChartAnnotation from 'chartjs-plugin-annotation';
-import { ChartOptions } from 'chart.js';
-import { line } from 'd3';
+import { GroupUserData } from 'src/interfaces/heatmap.interface';
 import { mean, median } from './helpers';
-
-type GroupUserData = {
-  [key: string]: AirNodes[];
-};
 
 @Component({
   selector: 'app-comp-chart',
@@ -29,18 +12,17 @@ type GroupUserData = {
   styleUrls: ['./comp-chart.component.scss'],
 })
 export class CompChartComponent implements OnInit, OnDestroy {
+  public chart!: Chart;
   @Input() chartID!: string;
   @Input() daysBack: number = 7;
   @Input() currentDay: boolean = true;
   @Input() aspectRatio: number = 2;
   @Input() dataType: string = 'users'; // or network_consumption
-
-  //dateFrom!: string;
   dateFrom: string = this._dateCalc.getNowTimeStamp().firstOfDay;
   dateEnd!: string;
-
-  nDataList!: number[];
-
+  totalDataList!: number[];
+  uniqDateArray: string[] = [];
+  groupDateData: GroupUserData = {};
   chartLineColor: string[] = [
     '#FF0000',
     '#FF7F00',
@@ -50,14 +32,7 @@ export class CompChartComponent implements OnInit, OnDestroy {
     '#4B0082',
     '#FF10F0',
   ];
-
-  public chart!: Chart;
-
   destroy$: Subject<boolean> = new Subject<boolean>();
-
-  uniqDateArray: string[] = [];
-  groupDateData: GroupUserData = {};
-  testArray: string[] = [];
 
   constructor(
     public _aNodeData: AirnodeDataService,
@@ -76,8 +51,6 @@ export class CompChartComponent implements OnInit, OnDestroy {
       ? this._dateCalc.getLastTimeStamp()
       : this._dateCalc.getNowTimeStamp().firstOfDay;
 
-    console.log(`comp-chart: ${this.dateFrom} -- ${this.dateEnd}`);
-
     this._aNodeData
       .getData(this.dateFrom, this.dateEnd)
       .pipe(takeUntil(this.destroy$))
@@ -90,6 +63,14 @@ export class CompChartComponent implements OnInit, OnDestroy {
             this.uniqDateArray[this.uniqDateArray.length - 1]
           )
             this.uniqDateArray.push(obj.timestamp.slice(0, 10));
+
+          this.totalDataList = data.map((obj) =>
+            this.dataType == 'users'
+              ? obj.users
+              : this.dataType == 'network'
+              ? obj.network_usage / (1024 * 1024 * 1024)
+              : obj.airnodes
+          );
         });
 
         // Object for multiline chart.
@@ -97,37 +78,18 @@ export class CompChartComponent implements OnInit, OnDestroy {
           this.groupDateData[uniqDate] = data.filter(
             ({ timestamp }) => timestamp.slice(0, 10) == uniqDate
           );
-          this.chart.data.labels = this.groupDateData[
-            this.dateFrom.slice(0, 10)
-          ].map((dataIn) => dataIn.timestamp.slice(10, 19));
         });
 
-        // Weekly mean
-        this.nDataList = data.map((obj) =>
-          this.dataType == 'users'
-            ? obj.users
-            : this.dataType == 'network'
-            ? obj.network_usage / (1024 * 1024 * 1024)
-            : obj.airnodes
-        );
+        this.chart.data.labels = this.groupDateData[
+          this.dateFrom.slice(0, 10)
+        ].map((dataIn) => dataIn.timestamp.slice(10, 19));
 
         this.uniqDateArray.forEach((uniqDate, index) => {
-          console.log('---------------');
-          console.log(index);
-          console.log(uniqDate);
-          console.log(this.chartLineColor[index]);
-          console.log(
-            'index!=this.uniqDateArray.length - 1',
-            index != this.uniqDateArray.length - 1
-          );
-
           this.chart.data.datasets[index] = {
             label:
               index != this.uniqDateArray.length - 1
                 ? uniqDate
                 : `Today ${uniqDate}`,
-
-            //yAxisID: 'yAxis0',
             borderWidth:
               index != this.uniqDateArray.length - 1 ? 0.75 * (index + 1) : 8,
             type: 'line',
@@ -144,65 +106,54 @@ export class CompChartComponent implements OnInit, OnDestroy {
                 : dataIn.airnodes
             ),
           };
-          console.log('----after dataset');
-          console.log(uniqDate);
-          console.log(this.chartLineColor[index]);
         });
 
         // length of array: the lines come after data is displayed
         this.chart.data.datasets[this.uniqDateArray.length] = {
           label: 'Weekly Mean',
-          //yAxisID: 'yAxis0',
           borderWidth: 2,
           type: 'line',
           pointStyle: 'dash',
           tension: 0.4,
           fill: false,
-          //backgroundColor: 'rgba(208, 27, 108, 0.15)',
           borderColor: '#9CFF2E',
-          data: Array(96).fill(mean(this.nDataList)),
+          data: Array(96).fill(mean(this.totalDataList)),
           borderDash: [20, 20],
         };
 
         this.chart.data.datasets[this.uniqDateArray.length + 1] = {
           label: 'Weekly Median',
-          //yAxisID: 'yAxis0',
           borderWidth: 2,
           type: 'line',
           pointStyle: 'dash',
           tension: 0.4,
           fill: false,
-          //backgroundColor: 'rgba(208, 27, 108, 0.15)',
           borderColor: '#FFFF00',
-          data: Array(96).fill(median(this.nDataList)),
+          data: Array(96).fill(median(this.totalDataList)),
           borderDash: [20, 20],
         };
 
         this.chart.data.datasets[this.uniqDateArray.length + 2] = {
           label: 'Weekly Max',
-          //yAxisID: 'yAxis0',
           borderWidth: 1,
           type: 'line',
           pointStyle: 'dash',
           tension: 0.4,
           fill: false,
-          //backgroundColor: 'rgba(208, 27, 108, 0.15)',
           borderColor: 'red',
-          data: Array(96).fill(Math.max(...this.nDataList)),
+          data: Array(96).fill(Math.max(...this.totalDataList)),
           borderDash: [10, 10],
         };
 
         this.chart.data.datasets[this.uniqDateArray.length + 3] = {
           label: 'Weekly Min',
-          //yAxisID: 'yAxis0',
           borderWidth: 1,
           type: 'line',
           pointStyle: 'dash',
           tension: 0.4,
           fill: false,
-          //backgroundColor: 'rgba(208, 27, 108, 0.15)',
-          borderColor: 'red',
-          data: Array(96).fill(Math.min(...this.nDataList)),
+          borderColor: 'blue',
+          data: Array(96).fill(Math.min(...this.totalDataList)),
           borderDash: [10, 10],
         };
 

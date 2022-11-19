@@ -40,17 +40,39 @@
   width: 48vw;
 }
 
+.comp-box {
+  //border: 1px solid yellow;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  //
+}
 .card4 {
   //border: 1px solid yellow;
-  padding: 0px 16px 16px 16px;
+  width: 100%;
+  padding: 0px 8px 0px 16px;
 }
 
 .card5 {
   //border: 1px solid yellow;
-  padding: 0 16px 0px 16px;
+
+  width: 100%;
+  padding: 0 16px 0px 8px;
 }
 
+.heat-box {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 16px 16px 16px;
+}
 .card6 {
+  width: 100%;
   //border: 1px solid yellow;
-  padding: 16px;
+  padding-right: 8px;
+}
+
+.card7 {
+  width: 100%;
+  padding-left: 8px;
+  //border: 1px solid yellow;
 }

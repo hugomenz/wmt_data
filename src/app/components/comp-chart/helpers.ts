@@ -17,5 +17,3 @@ export const median = (arr: number[]) => {
 
   return arr[(length - 1) / 2];
 };
-
-//Math.max(...array1)
