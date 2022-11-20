@@ -4,7 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AirnodeDataService } from 'src/app/services/airnode-data/airnode-data.service';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
 import { GroupUserData } from 'src/interfaces/heatmap.interface';
-import { mean, median } from './helpers';
+import { mean, median } from 'src/utils/heatmap.utils';
 
 @Component({
   selector: 'app-comp-chart',

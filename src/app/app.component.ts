@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { M_CHRT_TEXT } from './components/chart/main-chart-text.data';
+import { M_CHRT_TEXT } from '../utils/chartText.utils';
 
 @Component({
   selector: 'app-root',

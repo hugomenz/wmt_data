@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
-import { M_CHRT_TEXT } from '../../components/chart/main-chart-text.data';
+import { M_CHRT_TEXT } from '../../../utils/chartText.utils';
 import { AirNodes } from 'src/interfaces/data-firestore.interface';
 
 @Component({

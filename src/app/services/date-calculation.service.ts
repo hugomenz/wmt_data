@@ -102,6 +102,7 @@ export class DateCalculationService {
 
     return {
       objFormated: `${day}-${month}-${yyyy} 00:00:00`,
+      last: `${day}-${month}-${yyyy} 23:45:00`,
       title: this.prepareDateForTitle(
         previous.toString().split('(')[0].split(' '),
         4

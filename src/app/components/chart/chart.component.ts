@@ -3,7 +3,7 @@ import { AirnodeDataService } from '../../services/airnode-data/airnode-data.ser
 
 import Chart, { layouts } from 'chart.js/auto';
 import { Subject, takeUntil } from 'rxjs';
-import { M_CHRT_TEXT } from './main-chart-text.data';
+import { M_CHRT_TEXT } from '../../../utils/chartText.utils';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
 
 @Component({

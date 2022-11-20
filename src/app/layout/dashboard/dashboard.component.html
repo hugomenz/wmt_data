@@ -2,7 +2,7 @@
   <app-card title="{{ mainChartTitle }}" class="card1">
     <app-chart
       chartID="main"
-      [daysBack]="7"
+      [daysBack]="10"
       [currentDay]="true"
       [aspectRatio]="3"
     ></app-chart>
@@ -22,6 +22,26 @@
       <app-chart
         chartID="current"
         [daysBack]="0"
+        [currentDay]="true"
+        [aspectRatio]="2"
+      ></app-chart>
+    </app-card>
+  </div>
+
+  <div class="column">
+    <app-card class="card2" title="{{ chartPreviousDayTitle }}. Last 3 days">
+      <app-chart
+        chartID="lastThree"
+        [daysBack]="3"
+        [currentDay]="true"
+        [aspectRatio]="2"
+      ></app-chart>
+    </app-card>
+
+    <app-card class="card3" title="{{ chartCurrentDayTitle }}. Last 7 days">
+      <app-chart
+        chartID="lastSeven"
+        [daysBack]="7"
         [currentDay]="true"
         [aspectRatio]="2"
       ></app-chart>
@@ -50,18 +70,20 @@
   </div>
 
   <div class="heat-box">
-    <app-card
-      title="Heatmap Last 7 days 24h Network Consumption "
-      class="card6"
-    >
-      <app-heatmap [daysBack]="7" [currentDay]="true"></app-heatmap
+    <app-card title="Heatmap Last 10 days 24h Unique Users 24h " class="card6">
+      <app-heatmap
+        [daysBack]="10"
+        [currentDay]="true"
+        dataType="users"
+      ></app-heatmap
     ></app-card>
 
-    <app-card title="Heatmap Last 7 days Network" class="card7">
-      <app-heatmap [daysBack]="7" [currentDay]="true"></app-heatmap>
-      <!--  <app-heatmap></app-heatmap> -->
+    <app-card title="Heatmap Last 7 days Network Usage 24h" class="card7">
+      <app-heatmap
+        [daysBack]="10"
+        [currentDay]="true"
+        dataType="network"
+      ></app-heatmap>
     </app-card>
   </div>
 </div>
-
-<!--  -->
