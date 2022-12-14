@@ -9,10 +9,8 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import pytz
 
-
-
 # -- Carga FireBase aplicacion
-cred = credentials.Certificate("wmt-scraper-firebase-adminsdk-5ve67-5dde962c44.json")
+cred = credentials.Certificate(<CREDENTIALS JSON FILE!>)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 # --
@@ -49,8 +47,6 @@ def now_UCT_timestamp():
         "second": now.second
     }
 
-
-
 air_nodes_api_url = " https://api.wmtscan.com/json/air-nodes"
 network_api_url = "https://api.wmtscan.com/json/network"
 
@@ -66,7 +62,6 @@ while True:
     target = datetime(now['year'], now['month'], now['day'], now['hour'], 0, 0) + timedelta( minutes = k )
     print(f'Waiting till {target} to run')
     sleep_until(target)
-
 
     air_nodes_data = getData(air_nodes_api_url)
     network_data = getData(network_api_url)
@@ -84,11 +79,11 @@ while True:
         "users": network_data['users']
     }
 
-
     with open("output.json", "a") as data:
         json.dump(export_data, data, indent=4)
         data.close()
 
+    # if firebase crashed, keeps saving the data in the json file
     try:
       save(collection_id="WMT Scan Scraper",
           document_id=f"{timestamp}",
@@ -103,15 +98,11 @@ while True:
     except:
         pass # doing nothing on exception
 
-
-
-
     if k < 60:
         k = k + 15 ## Ponerlo a 15 minutos
 
     else:
         k = 15
     print(f'[ {k} ]')
-
 
     print("="*50)
