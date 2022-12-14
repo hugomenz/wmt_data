@@ -11,10 +11,10 @@ const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
   },
-  {
+  /*   {
     path: 'support',
     component: SupportComponent,
-  },
+  }, */
   {
     path: 'about',
     component: AboutComponent,

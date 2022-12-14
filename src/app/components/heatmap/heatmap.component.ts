@@ -9,6 +9,11 @@ import {
   HeatData,
 } from 'src/interfaces/heatmap.interface';
 import { ApexOptions } from 'src/interfaces/ng-apex.interface';
+import {
+  getLastTimeStamp,
+  getNowTimeStamp,
+  getPreviousDay,
+} from 'src/utils/date-format.utils';
 import { heatMapGetIntervalData } from 'src/utils/heatmap.utils';
 import { AirNodes } from '../../../interfaces/data-firestore.interface';
 
@@ -21,7 +26,7 @@ export class HeatmapComponent implements OnInit {
   @Input() daysBack: number = 7;
   @Input() currentDay: boolean = true;
   @Input() dataType: string = 'users'; // or network
-  dateFrom: string = this._dateCalc.getNowTimeStamp().firstOfDay;
+  dateFrom: string = getNowTimeStamp().firstOfDay;
   dateEnd!: string;
   dateFromPrevious!: string;
 
@@ -38,28 +43,22 @@ export class HeatmapComponent implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
   public chartOptions: Partial<ApexOptions> = {} as Partial<ApexOptions>;
 
-  constructor(
-    public _aNodeData: AirnodeDataService,
-    public _dateCalc: DateCalculationService
-  ) {}
+  constructor(public _aNodeData: AirnodeDataService) {}
 
   ngOnInit(): void {
     this.uniqDateArray = [];
 
-    this.dateFrom = this._dateCalc.getPreviousDay(
-      this._dateCalc.getNowTimeStamp().firstOfDay,
+    this.dateFrom = getPreviousDay(
+      getNowTimeStamp().firstOfDay,
       this.daysBack
     ).objFormated;
 
     this.dateEnd = this.currentDay
-      ? this._dateCalc.getLastTimeStamp()
-      : this._dateCalc.getNowTimeStamp().firstOfDay;
+      ? getLastTimeStamp()
+      : getNowTimeStamp().firstOfDay;
 
     this._aNodeData
-      .getData(
-        this._dateCalc.getPreviousDay(this.dateFrom, 1).last,
-        this.dateEnd
-      )
+      .getData(getPreviousDay(this.dateFrom, 1).last, this.dateEnd)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
         // Array of unique dates is needed to group the data

@@ -9,6 +9,6 @@
     }
   },
   "projects": {
-    "default": "wmt-scraper"
+    "default": "wmtdata-scraper"
   }
 }

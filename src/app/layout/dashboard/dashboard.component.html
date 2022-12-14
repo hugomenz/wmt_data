@@ -2,9 +2,10 @@
   <app-card title="{{ mainChartTitle }}" class="card1">
     <app-chart
       chartID="main"
-      [daysBack]="10"
+      [daysBack]="30"
       [currentDay]="true"
       [aspectRatio]="3"
+      [lineTension]="0.6"
     ></app-chart>
   </app-card>
 
@@ -15,6 +16,7 @@
         [daysBack]="1"
         [currentDay]="false"
         [aspectRatio]="2"
+        [lineTension]="0.3"
       ></app-chart>
     </app-card>
 
@@ -24,53 +26,41 @@
         [daysBack]="0"
         [currentDay]="true"
         [aspectRatio]="2"
+        [lineTension]="0.3"
       ></app-chart>
     </app-card>
   </div>
 
-  <div class="column">
-    <app-card class="card2" title="{{ chartPreviousDayTitle }}. Last 3 days">
-      <app-chart
-        chartID="lastThree"
-        [daysBack]="3"
-        [currentDay]="true"
-        [aspectRatio]="2"
-      ></app-chart>
-    </app-card>
-
-    <app-card class="card3" title="{{ chartCurrentDayTitle }}. Last 7 days">
-      <app-chart
-        chartID="lastSeven"
-        [daysBack]="7"
-        [currentDay]="true"
-        [aspectRatio]="2"
-      ></app-chart>
-    </app-card>
-  </div>
   <div class="comp-box">
-    <app-card title="Weekly Comparison Unique Users 24h" class="card4">
+    <app-card title="Weekly Comparison Unique Users 24h GMT+0100" class="card4">
       <app-comp-chart
         chartID="comp"
         dataType="users"
         [daysBack]="7"
         [currentDay]="true"
-        [aspectRatio]="1.5"
+        [aspectRatio]="1.3"
       ></app-comp-chart>
     </app-card>
 
-    <app-card title="Weekly Comparison Network Usage 24h" class="card5">
+    <app-card
+      title="Weekly Comparison Network Usage 24h GMT+0100"
+      class="card5"
+    >
       <app-comp-chart
         chartID="net-comp"
         dataType="network"
         [daysBack]="7"
         [currentDay]="true"
-        [aspectRatio]="1.5"
+        [aspectRatio]="1.3"
       ></app-comp-chart>
     </app-card>
   </div>
 
   <div class="heat-box">
-    <app-card title="Heatmap Last 10 days 24h Unique Users 24h " class="card6">
+    <app-card
+      title="Heatmap Last 10 days 24h Unique Users 24h GMT+0100"
+      class="card6"
+    >
       <app-heatmap
         [daysBack]="10"
         [currentDay]="true"
@@ -78,7 +68,10 @@
       ></app-heatmap
     ></app-card>
 
-    <app-card title="Heatmap Last 7 days Network Usage 24h" class="card7">
+    <app-card
+      title="Heatmap Last 10 days Network Usage 24h GMT+0100"
+      class="card7"
+    >
       <app-heatmap
         [daysBack]="10"
         [currentDay]="true"

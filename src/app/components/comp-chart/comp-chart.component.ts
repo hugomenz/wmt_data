@@ -4,6 +4,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { AirnodeDataService } from 'src/app/services/airnode-data/airnode-data.service';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
 import { GroupUserData } from 'src/interfaces/heatmap.interface';
+import {
+  getLastTimeStamp,
+  getNowTimeStamp,
+  getPreviousDay,
+} from 'src/utils/date-format.utils';
 import { mean, median } from 'src/utils/heatmap.utils';
 
 @Component({
@@ -18,7 +23,7 @@ export class CompChartComponent implements OnInit, OnDestroy {
   @Input() currentDay: boolean = true;
   @Input() aspectRatio: number = 2;
   @Input() dataType: string = 'users'; // or network_consumption
-  dateFrom: string = this._dateCalc.getNowTimeStamp().firstOfDay;
+  dateFrom: string = getNowTimeStamp().firstOfDay;
   dateEnd!: string;
   totalDataList!: number[];
   uniqDateArray: string[] = [];
@@ -34,22 +39,19 @@ export class CompChartComponent implements OnInit, OnDestroy {
   ];
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(
-    public _aNodeData: AirnodeDataService,
-    public _dateCalc: DateCalculationService
-  ) {}
+  constructor(public _aNodeData: AirnodeDataService) {}
 
   ngOnInit(): void {
     this.uniqDateArray = [];
 
-    this.dateFrom = this._dateCalc.getPreviousDay(
-      this._dateCalc.getNowTimeStamp().firstOfDay,
+    this.dateFrom = getPreviousDay(
+      getNowTimeStamp().firstOfDay,
       this.daysBack
     ).objFormated;
 
     this.dateEnd = this.currentDay
-      ? this._dateCalc.getLastTimeStamp()
-      : this._dateCalc.getNowTimeStamp().firstOfDay;
+      ? getLastTimeStamp()
+      : getNowTimeStamp().firstOfDay;
 
     this._aNodeData
       .getData(this.dateFrom, this.dateEnd)

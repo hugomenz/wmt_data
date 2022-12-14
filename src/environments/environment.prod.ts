@@ -1,13 +1,13 @@
 export const environment = {
   firebase: {
-    projectId: 'wmt-scraper',
-    appId: '1:93007636932:web:a45d00bcb60fb2de9fdc91',
-    storageBucket: 'wmt-scraper.appspot.com',
     locationId: 'us-central',
-    apiKey: 'AIzaSyDBX6KJ4m-YjIubydf-nEFiHzi1hio449k',
-    authDomain: 'wmt-scraper.firebaseapp.com',
-    messagingSenderId: '93007636932',
-    measurementId: 'G-NVDBB94LJ2',
+    apiKey: 'AIzaSyDf5mKOuej0JbqbIGFgrB5Yt6c38XwDREQ',
+    authDomain: 'wmtdata-scraper.firebaseapp.com',
+    projectId: 'wmtdata-scraper',
+    storageBucket: 'wmtdata-scraper.appspot.com',
+    messagingSenderId: '1094634279342',
+    appId: '1:1094634279342:web:77cc62cb07559511f6383f',
+    measurementId: 'G-TZ2FLZ4366',
   },
-  production: true
+  production: true,
 };

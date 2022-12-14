@@ -5,6 +5,11 @@ import Chart, { layouts } from 'chart.js/auto';
 import { Subject, takeUntil } from 'rxjs';
 import { M_CHRT_TEXT } from '../../../utils/chartText.utils';
 import { DateCalculationService } from 'src/app/services/date-calculation.service';
+import {
+  getLastTimeStamp,
+  getNowTimeStamp,
+  getPreviousDay,
+} from 'src/utils/date-format.utils';
 
 @Component({
   selector: 'app-chart',
@@ -16,35 +21,41 @@ export class ChartComponent implements OnInit, OnDestroy {
   @Input() daysBack: number = 7;
   @Input() currentDay: boolean = false;
   @Input() aspectRatio: number = 2;
+  @Input() lineTension: number = 0.2; // 0 - 1
   //dateFrom!: string;
-  dateFrom: string = this._dateCalc.getNowTimeStamp().firstOfDay;
+  dateFrom: string = getNowTimeStamp().firstOfDay;
   dateEndBefore!: string;
+
+  dataUsers: number[] = [];
+  dataNetwork: number[] = [];
+  chartLabelData: string[] = [];
 
   public chart!: Chart;
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(
-    public _aNodeData: AirnodeDataService,
-    public _dateCalc: DateCalculationService
-  ) {}
+  constructor(public _aNodeData: AirnodeDataService) {}
 
   ngOnInit(): void {
-    this.dateFrom = this._dateCalc.getPreviousDay(
-      this._dateCalc.getNowTimeStamp().firstOfDay,
+    this.dateFrom = getPreviousDay(
+      getNowTimeStamp().firstOfDay,
       this.daysBack
     ).objFormated;
 
     this.dateEndBefore = this.currentDay
-      ? this._dateCalc.getLastTimeStamp()
-      : this._dateCalc.getNowTimeStamp().firstOfDay;
+      ? getLastTimeStamp()
+      : getNowTimeStamp().firstOfDay;
 
     this._aNodeData
       .getData(this.dateFrom, this.dateEndBefore)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
-        this.chart.data.labels = data.map((dataIn) =>
-          dataIn.timestamp.slice(0, -3)
+        this.dataUsers = data.map((element) => element.users);
+        this.dataNetwork = data.map(
+          (element) => element.network_usage / (1024 * 1024 * 1024)
+        );
+        this.chart.data.labels = data.map((element) =>
+          element.timestamp.slice(0, -3)
         );
 
         this.chart.data.datasets[0] = {
@@ -52,14 +63,25 @@ export class ChartComponent implements OnInit, OnDestroy {
           yAxisID: 'yAxis0',
           type: 'line',
           pointStyle: 'dash',
-          tension: 0.4,
+          tension: this.lineTension,
           fill: true,
           backgroundColor: 'rgba(208, 27, 108, 0.15)',
           borderColor: '#FD7E14',
-          data: data.map((dataIn) => dataIn.users),
+          data: this.dataUsers,
+        };
+        this.chart.data.datasets[1] = {
+          label: M_CHRT_TEXT.chrtLblNetwork,
+          yAxisID: 'yAxis1',
+          type: 'line',
+          pointStyle: 'dash',
+          tension: this.lineTension,
+          fill: true,
+          backgroundColor: 'rgba(90, 35, 149, 0.2)',
+          borderColor: 'rgba(245,26,116, 0.2)',
+          data: this.dataNetwork,
         };
 
-        this.chart.data.datasets[1] = {
+        /* this.chart.data.datasets[1] = {
           label: M_CHRT_TEXT.chrtLblNetwork,
           yAxisID: 'yAxis1',
           type: 'bar',
@@ -67,7 +89,7 @@ export class ChartComponent implements OnInit, OnDestroy {
           data: data.map(
             (dataIn) => dataIn.network_usage / (1024 * 1024 * 1024)
           ),
-        };
+        }; */
 
         this.chart.options.scales = {
           yAxis0: {

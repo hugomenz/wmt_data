@@ -15,7 +15,7 @@ export class AirnodeDataService {
 
   getData(startDate: string, endDate: string): Observable<AirNodes[]> {
     return this.firestore
-      .collection<AirNodes>('WMT Scan Scraper', (ref) =>
+      .collection<AirNodes>('wmtscan-data', (ref) =>
         ref.orderBy('timestamp').startAt(startDate).endAt(endDate)
       )
       .valueChanges();
