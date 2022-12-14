@@ -47,6 +47,9 @@ Thumbs.db
 .runtimeconfig.json
 firebase.json
 .firebaserc
+/src/envirenments/envirenment.prod.ts
+/src/envirenments/envirenment.ts
+
 
 # Python Script
 _python_script
