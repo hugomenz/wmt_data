@@ -45,3 +45,11 @@ Thumbs.db
 .firebase
 *-debug.log
 .runtimeconfig.json
+firebase.json
+.firebaserc
+
+# Python Script
+_python_script/
+
+# Others
+.browserslistrc
