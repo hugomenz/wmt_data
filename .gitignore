@@ -49,7 +49,7 @@ firebase.json
 .firebaserc
 
 # Python Script
-_python_script/
+/_python_script
 
 # Others
 .browserslistrc
