@@ -1,11 +1,13 @@
 # WMT Data: A Real-Time Data Visualization Tool for the World Mobile Token Network
 
+![WMTData](./src/assets/img/wmt%20data%20banner.JPG)
+
 [WMT Data](https://wmtdata.net/) is an application that uses web scraping to collect data from the [WMTScan](https://wmtscan.com/) from World Mobile.
 [World Mobile Token](https://worldmobiletoken.com/) is a proposed blockchain-based solution that would enable a sharing economy for telecommunications infrastructure. The use of blockchain in this model would enable the removal of intermediaries and a layer of cost from the delivery mechanism, while enabling rapid expansion of the network through the transparency provided by smart contracts. This solution aims to address the affordability issue and more efficient use of network resources to enable connectivity to be provided in a more distributed and decentralized manner.
 
-The data collected through web scraping is automatically stored in a Firebase database. The application performs different queries to display various graphs, such as the number of users and network consumption over time. It also shows real-time daily network usage and weekly comparison graphs for both the number of users and network usage.
+The data collected through web scraping every 15 minutes is automatically stored in a Firebase database. The application performs different queries to display various graphs, such as the number of users and network consumption over time. It also shows daily network usage and weekly comparison real-time graphs for both the number of users and network usage.
 
-The application was developed using Angular, TypeScript, and the RxJS library to enable reactive programming and real-time graphs.
+The application was developed using Angular, TypeScript, and the RxJs library to enable reactive programming and real-time graphs.
 
 # Features
 
